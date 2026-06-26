@@ -3,19 +3,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import posthog from 'posthog-js'
-import { DM_ALIGNMENT, DM_MAP } from './promoConstants.js'
-
-const ALL_DMS = Object.keys(DM_ALIGNMENT).filter(k => k !== 'OPEN').sort()
-
-const ROLE_MAP = {
-  'Pedro Ortega':   'Pedro Ortega · DM',
-  'Carlos Tenorio': 'Carlos Tenorio · DM',
-  'Lavasha Rouse':  'Lavasha Rouse · DM',
-  'Shawn Haman':    'Shawn Haman · DM',
-  'Jay Tarantino':  'Jay Tarantino · DM',
-  'James Frazine':  'James Frazine · DM',
-  'Kyle Lusher':    'Kyle Lusher · DM',
-}
 
 const SUPABASE_URL = 'https://pezcvxcazdvkggoljakh.supabase.co'
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlemN2eGNhemR2a2dnb2xqYWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMTQ0MjUsImV4cCI6MjA5MzU5MDQyNX0.oOwzvUeWwfXokkqmmkgGCHi6koeHRL2al0Pg-xrW_EQ'
@@ -68,7 +55,7 @@ function RankCell({ rank }) {
   return <span className="text-[13px] font-bold text-slate-500 tabular-nums">{rank}</span>
 }
 
-function LoginModal({ onLogin, apiBase }) {
+function LoginModal({ onLogin, apiBase, dmMap, roleMap }) {
   const [name,         setName]         = useState('')
   const [results,      setResults]      = useState(null)
   const [searching,    setSearching]    = useState(false)
@@ -115,7 +102,7 @@ function LoginModal({ onLogin, apiBase }) {
     if (!trimmed) return
     const sid = storeId || null
     const storeName = selected?.storeName ?? null
-    const dmName = sid ? (DM_MAP[Number(sid)] ?? null) : null
+    const dmName = sid ? (dmMap[Number(sid)] ?? null) : null
     onLogin({ name: trimmed, storeId: sid, storeName, dmName })
   }
 
@@ -171,7 +158,7 @@ function LoginModal({ onLogin, apiBase }) {
               Not a restaurant employee?{' '}
               <button
                 type="button"
-                onClick={() => onLogin({ name: name.trim(), storeId: null, storeName: ROLE_MAP[name.trim()] ?? name.trim(), dmName: null })}
+                onClick={() => onLogin({ name: name.trim(), storeId: null, storeName: roleMap?.[name.trim()] ?? name.trim(), dmName: null })}
                 className="text-[#F5831F] underline underline-offset-2 hover:text-[#e07318] transition-colors"
               >
                 Continue as {name.trim()}
@@ -198,7 +185,7 @@ function LoginModal({ onLogin, apiBase }) {
   )
 }
 
-function CommentsSection({ allStores, isAdmin, homeStore }) {
+function CommentsSection({ allStores, isAdmin, homeStore, dmMap }) {
   const [comments,     setComments]     = useState([])
   const [loadingC,     setLoadingC]     = useState(true)
   const [posting,      setPosting]      = useState(false)
@@ -248,7 +235,7 @@ function CommentsSection({ allStores, isAdmin, homeStore }) {
     const raw  = localStorage.getItem('tice_user')
     const name = raw ? JSON.parse(raw)?.name : null
     const storeObj = allStores.find(s => s.locRef === authorStore)
-    const dmName   = DM_MAP[Number(authorStore)] ?? null
+    const dmName   = dmMap?.[Number(authorStore)] ?? null
     try {
       let image_url = null
       if (imageFile) {
@@ -439,7 +426,10 @@ const VIEWS = [
 ]
 
 // apiBase: '' for same-origin apps, or full URL like 'https://tice-hub.vercel.app'
-export function UpsellLeaderboard({ apiBase = '' }) {
+// dmAlignment: { [dmName]: storeNumber[] }  dmMap: { [storeNumber]: dmName }
+// roleMap: { [name]: displayLabel } for non-restaurant logins
+export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, roleMap = {} }) {
+  const allDms = Object.keys(dmAlignment).filter(k => k !== 'OPEN').sort()
   const [data,           setData]           = useState(null)
   const [loading,        setLoading]        = useState(true)
   const [error,          setError]          = useState(null)
@@ -513,7 +503,7 @@ export function UpsellLeaderboard({ apiBase = '' }) {
 
   const spotlightStores = useMemo(() => {
     if (dmFilter === 'all') return allStores
-    const dmLocRefs = new Set((DM_ALIGNMENT[dmFilter] ?? []).map(String))
+    const dmLocRefs = new Set((dmAlignment[dmFilter] ?? []).map(String))
     return allStores.filter(s => dmLocRefs.has(s.locRef))
   }, [allStores, dmFilter])
 
@@ -567,7 +557,7 @@ export function UpsellLeaderboard({ apiBase = '' }) {
           <select value={dmFilter} onChange={e => { setDmFilter(e.target.value); setStoreSpotlight('all') }}
             className="bg-[#1a2635] border border-[#243044] rounded-lg px-3 py-1.5 text-[11px] text-slate-300 cursor-pointer">
             <option value="all">All DMs</option>
-            {ALL_DMS.map(dm => <option key={dm} value={dm}>{dm}</option>)}
+            {allDms.map(dm => <option key={dm} value={dm}>{dm}</option>)}
           </select>
           {ticeUser?.storeId && !isAdmin ? (
             <span className="bg-[#1a2635] border border-[#243044] rounded-lg px-3 py-1.5 text-[11px] text-slate-300">
@@ -680,7 +670,7 @@ export function UpsellLeaderboard({ apiBase = '' }) {
 
       {!isHof && (
         <div className="mt-4">
-          <CommentsSection allStores={allStores} isAdmin={isAdmin} homeStore={homeStore} />
+          <CommentsSection allStores={allStores} isAdmin={isAdmin} homeStore={homeStore} dmMap={dmMap} />
         </div>
       )}
 
@@ -731,7 +721,7 @@ export function UpsellLeaderboard({ apiBase = '' }) {
         </div>
       )}
 
-      {!ticeUser && <LoginModal onLogin={handleLogin} apiBase={apiBase} />}
+      {!ticeUser && <LoginModal onLogin={handleLogin} apiBase={apiBase} dmMap={dmMap} roleMap={roleMap} />}
     </div>
   )
 }
