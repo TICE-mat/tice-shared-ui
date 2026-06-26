@@ -428,7 +428,7 @@ const VIEWS = [
 // apiBase: '' for same-origin apps, or full URL like 'https://tice-hub.vercel.app'
 // dmAlignment: { [dmName]: storeNumber[] }  dmMap: { [storeNumber]: dmName }
 // roleMap: { [name]: displayLabel } for non-restaurant logins
-export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, roleMap = {} }) {
+export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, roleMap = {}, embedded = false }) {
   const allDms = Object.keys(dmAlignment).filter(k => k !== 'OPEN').sort()
   const [data,           setData]           = useState(null)
   const [loading,        setLoading]        = useState(true)
@@ -517,10 +517,10 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
   }
 
   return (
-    <div className="min-h-screen bg-[#0e1a2b] font-sans">
+    <div className={`${embedded ? '' : 'min-h-screen'} bg-[#0e1a2b] font-sans`}>
 
       {/* Header */}
-      <div className="bg-[#070f1a] border-b border-slate-800/60 px-5 py-5">
+      {!embedded && <div className="bg-[#070f1a] border-b border-slate-800/60 px-5 py-5">
         <div className="max-w-[1200px] mx-auto">
           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div>
@@ -541,7 +541,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
             </div>
           )}
         </div>
-      </div>
+      </div>}
 
       {/* Controls */}
       <div className="bg-slate-900/60 border-b border-slate-800 px-5 py-2.5">
