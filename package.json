@@ -1,0 +1,11 @@
+{
+  "name": "@tice/shared-ui",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "peerDependencies": {
+    "react": ">=18",
+    "@supabase/supabase-js": ">=2",
+    "posthog-js": ">=1"
+  }
+}
