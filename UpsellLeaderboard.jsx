@@ -55,7 +55,7 @@ function RankCell({ rank }) {
   return <span className="text-[13px] font-bold text-slate-500 tabular-nums">{rank}</span>
 }
 
-function LoginModal({ onLogin, apiBase, dmMap, roleMap }) {
+function LoginModal({ onLogin, apiBase, dmMap, roleMap, scopeLabel }) {
   const [name,         setName]         = useState('')
   const [results,      setResults]      = useState(null)
   const [searching,    setSearching]    = useState(false)
@@ -114,7 +114,7 @@ function LoginModal({ onLogin, apiBase, dmMap, roleMap }) {
           <h2 className="text-[18px] font-black uppercase tracking-widest text-[#F5831F] leading-tight">
             Big Box Upsell Contest
           </h2>
-          <p className="text-[11px] text-slate-400 mt-2">FL stores only · Jun 9–30</p>
+          <p className="text-[11px] text-slate-400 mt-2">{scopeLabel} · Jun 9–30</p>
         </div>
         <form onSubmit={handleSubmit}>
           <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-2">
@@ -428,7 +428,7 @@ const VIEWS = [
 // apiBase: '' for same-origin apps, or full URL like 'https://tice-hub.vercel.app'
 // dmAlignment: { [dmName]: storeNumber[] }  dmMap: { [storeNumber]: dmName }
 // roleMap: { [name]: displayLabel } for non-restaurant logins
-export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, roleMap = {}, embedded = false }) {
+export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, roleMap = {}, embedded = false, scopeLabel = 'FL stores only' }) {
   const allDms = Object.keys(dmAlignment).filter(k => k !== 'OPEN').sort()
   const [data,           setData]           = useState(null)
   const [loading,        setLoading]        = useState(true)
@@ -525,7 +525,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div>
               <h1 className="text-[22px] font-black uppercase tracking-widest text-[#F5831F] leading-none">Big Box Upsell Contest</h1>
-              <p className="text-[11px] text-slate-500 mt-1.5">Contest starts June 9 · FL stores only · attach rate = upsell checks ÷ total BB checks</p>
+              <p className="text-[11px] text-slate-500 mt-1.5">Contest starts June 9 · {scopeLabel} · attach rate = upsell checks ÷ total BB checks</p>
             </div>
             <div className="text-right flex-shrink-0">
               <div className="text-[11px] font-semibold text-[#F5831F]">#TICEwakesuptoWIN</div>
@@ -721,7 +721,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
         </div>
       )}
 
-      {!ticeUser && <LoginModal onLogin={handleLogin} apiBase={apiBase} dmMap={dmMap} roleMap={roleMap} />}
+      {!ticeUser && <LoginModal onLogin={handleLogin} apiBase={apiBase} dmMap={dmMap} roleMap={roleMap} scopeLabel={scopeLabel} />}
     </div>
   )
 }
