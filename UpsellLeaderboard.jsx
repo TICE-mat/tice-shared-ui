@@ -635,7 +635,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
                 </div>
                 <div className="text-right">
                   <div className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">BB Checks</div>
-                  <div className="text-[22px] font-bold text-slate-300 tabular-nums leading-none">{fmtN(pinnedStore.totalChecks)}</div>
+                  <div className="text-[22px] font-bold text-slate-300 tabular-nums leading-none">{fmtN(pinnedStore.bigBoxChecks)}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">Upsell Checks</div>
@@ -657,7 +657,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
                 <div className="text-[13px] font-bold text-white leading-tight">{s.storeName}</div>
                 <div className="text-[10px] text-slate-500 mt-0.5">{dmFirst(s.dmName)} · #{s.locRef}</div>
                 <div className={`text-[22px] font-black tabular-nums mt-2 leading-none ${attachColorClass(s.upsellPct)}`}>{fmtPct(s.upsellPct)}</div>
-                <div className="text-[9px] text-slate-600 mt-0.5">{fmtN(s.upsellChecks)} upsell / {fmtN(s.totalChecks)} BB</div>
+                <div className="text-[9px] text-slate-600 mt-0.5">{fmtN(s.upsellChecks)} upsell / {fmtN(s.bigBoxChecks)} BB</div>
               </div>
             ))}
           </div>
@@ -705,7 +705,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
                       </td>
                       <td className="px-4 py-3"><span className="text-[12px] text-slate-400">{dmFirst(store.dmName)}</span></td>
                       <td className="px-4 py-3 text-right"><span className={`text-[15px] tabular-nums ${attachColorClass(store.upsellPct)}`}>{fmtPct(store.upsellPct)}</span></td>
-                      <td className="px-4 py-3 text-right"><span className="text-[13px] text-slate-300 tabular-nums">{fmtN(store.totalChecks)}</span></td>
+                      <td className="px-4 py-3 text-right"><span className="text-[13px] text-slate-300 tabular-nums">{fmtN(store.bigBoxChecks)}</span></td>
                       <td className="px-4 py-3 text-right"><span className="text-[13px] text-slate-300 tabular-nums">{fmtN(store.upsellChecks)}</span></td>
                     </tr>
                   )
