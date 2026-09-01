@@ -114,7 +114,7 @@ function LoginModal({ onLogin, apiBase, dmMap, roleMap, scopeLabel }) {
           <h2 className="text-[18px] font-black uppercase tracking-widest text-[#F5831F] leading-tight">
             Big Box Upsell Contest
           </h2>
-          <p className="text-[11px] text-slate-400 mt-2">{scopeLabel} · Jun 9–30</p>
+          <p className="text-[11px] text-slate-400 mt-2">{scopeLabel}</p>
         </div>
         <form onSubmit={handleSubmit}>
           <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-2">
@@ -534,7 +534,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
           </div>
           {data && (
             <div className="flex gap-3">
-              <KpiCard label="Today"     rate={data.day.flRate}       totalChecks={data.day.flTotalChecks}       range="FL fleet" />
+              <KpiCard label="Today"     rate={data.day.flRate}       totalChecks={data.day.flTotalChecks} />
               <KpiCard label="Yesterday" rate={data.yesterday.flRate} totalChecks={data.yesterday.flTotalChecks} range={data.yest} />
               <KpiCard label="WTD"       rate={data.wtd.flRate}       totalChecks={data.wtd.flTotalChecks}       range="Jun 8+" />
               <KpiCard label="PTD"       rate={data.ptd.flRate}       totalChecks={data.ptd.flTotalChecks}       range="Jun 1+" />
