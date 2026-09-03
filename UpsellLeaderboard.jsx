@@ -525,7 +525,7 @@ export function UpsellLeaderboard({ apiBase = '', dmAlignment = {}, dmMap = {}, 
           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div>
               <h1 className="text-[22px] font-black uppercase tracking-widest text-[#F5831F] leading-none">Big Box Upsell Contest</h1>
-              <p className="text-[11px] text-slate-500 mt-1.5">Contest starts June 9 · {scopeLabel} · attach rate = upsell checks ÷ total BB checks</p>
+              <p className="text-[11px] text-slate-500 mt-1.5">Contest starts June 9 · {scopeLabel} · attach rate = upsell checks ÷ total checks (BB + upsell)</p>
             </div>
             <div className="text-right flex-shrink-0">
               <div className="text-[11px] font-semibold text-[#F5831F]">#TICEwakesuptoWIN</div>
