@@ -378,7 +378,7 @@ function HallOfFame({ apiBase }) {
 
   if (loading) return <div className="max-w-[1200px] mx-auto px-5 py-16 text-center text-[12px] text-slate-500 animate-pulse">Loading Hall of Fame…</div>
   if (error)   return <div className="max-w-[1200px] mx-auto px-5 py-8 text-center text-[12px] text-rose-400">{error}</div>
-  if (!data?.top3?.length) return <div className="max-w-[1200px] mx-auto px-5 py-16 text-center text-[12px] text-slate-500">No records yet — contest starts Jun 9.</div>
+  if (!data?.top3?.length) return <div className="max-w-[1200px] mx-auto px-5 py-16 text-center text-[12px] text-slate-500">No records yet.</div>
 
   const [gold, silver, bronze] = data.top3
   const podium = [silver, gold, bronze].filter(Boolean)
@@ -388,7 +388,7 @@ function HallOfFame({ apiBase }) {
       <div className="text-center mb-10">
         <div className="text-[9px] font-bold uppercase tracking-widest text-[#F5831F] mb-2">All-Time Best Single Day</div>
         <h2 className="text-[26px] font-black uppercase tracking-widest text-white leading-none">Hall of Fame</h2>
-        <p className="text-[11px] text-slate-500 mt-2">Highest single-day attach rates since Jun 9 · min 10 checks</p>
+        <p className="text-[11px] text-slate-500 mt-2">Highest single-day attach rates · min 10 checks</p>
       </div>
       <div className="flex items-end justify-center gap-4 max-w-2xl mx-auto">
         {podium.map(entry => {
